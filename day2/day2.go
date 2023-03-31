@@ -77,24 +77,25 @@ func parseScoreFromResult(a int, encResult string) int {
 	return -1
 }
 
-func puzzle1(lines []string) int {
+func calculateTotalScore(lines []string, f func(int, string) int) int {
 	var totalScore = 0
 	for _, line := range lines {
 		s := strings.Split(line, " ")
 		a := parseScore(s[0])
-		b := parseScore(s[1])
+		b := f(a, s[1])
 		totalScore += calculateScore(a, b)
 	}
 	return totalScore
 }
 
+func puzzle1(lines []string) int {
+	return calculateTotalScore(lines, func(a int, result string) int {
+		return parseScore(result)
+	})
+}
+
 func puzzle2(lines []string) int {
-	var totalScore = 0
-	for _, line := range lines {
-		s := strings.Split(line, " ")
-		a := parseScore(s[0])
-		b := parseScoreFromResult(a, s[1])
-		totalScore += calculateScore(a, b)
-	}
-	return totalScore
+	return calculateTotalScore(lines, func(a int, result string) int {
+		return parseScoreFromResult(a, result)
+	})
 }
